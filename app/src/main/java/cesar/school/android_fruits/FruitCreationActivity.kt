@@ -27,7 +27,7 @@ class FruitCreationActivity : AppCompatActivity() {
             if (!name.isNullOrEmpty() && !benefits.isNullOrEmpty()) {
                 newFruit = Fruit(name, benefits, (0..3).random())
                 val returnIntent = Intent()
-                returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_RESULT_ID, newFruit)
+                returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ADDED_ID, newFruit)
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()
             }

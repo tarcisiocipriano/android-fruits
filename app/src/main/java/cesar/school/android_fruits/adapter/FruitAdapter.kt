@@ -13,7 +13,7 @@ import cesar.school.android_fruits.model.Fruit
 
 class FruitAdapter(private val context: Context,
                    private val fruits: List<Fruit>,
-                   private val callback: (Fruit) -> Unit): RecyclerView.Adapter<FruitAdapter.VH>() {
+                   private val callback: (Fruit, Int) -> Unit): RecyclerView.Adapter<FruitAdapter.VH>() {
 
     private val fruitPhotos: TypedArray by lazy {
         context.resources.obtainTypedArray(R.array.fruitPhotos)
@@ -30,7 +30,7 @@ class FruitAdapter(private val context: Context,
         val vh = VH(binding)
         vh.itemView.setOnClickListener {
             val fruit = fruits[vh.adapterPosition]
-            callback(fruit)
+            callback(fruit, vh.adapterPosition)
         }
         return vh
     }
