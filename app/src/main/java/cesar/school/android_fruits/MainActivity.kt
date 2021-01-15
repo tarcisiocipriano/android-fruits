@@ -2,6 +2,7 @@ package cesar.school.android_fruits
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -19,15 +20,17 @@ class MainActivity : AppCompatActivity() {
         const val MAIN_ACTIVITY_REMOVE_REQUEST_CODE = 2
         const val MAIN_ACTIVITY_FRUIT_ID = "fruit"
         const val MAIN_ACTIVITY_FRUIT_INDEX = "fruitIndex"
+
+        val listNewPhotos = mutableListOf<Bitmap>()
     }
 
     private lateinit var binding : ActivityMainBinding
 
     private val listFruits = mutableListOf(
-        Fruit("Apple", "Lorem ipsum", 0),
-        Fruit("Grape", "Lorem ipsum", 1),
-        Fruit("Orange", "Lorem ipsum", 2),
-        Fruit("Strawberry", "Lorem ipsum", 3)
+        Fruit("Apple", "Lorem ipsum", 0, null),
+        Fruit("Grape", "Lorem ipsum", 1, null),
+        Fruit("Orange", "Lorem ipsum", 2, null),
+        Fruit("Strawberry", "Lorem ipsum", 3, null)
     )
 
     private val fruitAdapter = FruitAdapter(this, listFruits, this::onFruitClickListener)
@@ -60,9 +63,11 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             if (MAIN_ACTIVITY_ADD_REQUEST_CODE == requestCode) {
-                val (name, benefits, photo) = data?.getParcelableExtra<Fruit>(MAIN_ACTIVITY_FRUIT_ADDED_ID) as Fruit
-                listFruits.add(Fruit(name, benefits, photo))
-                fruitAdapter.notifyItemInserted(listFruits.lastIndex)
+                val newFruit = data?.getParcelableExtra<Fruit>(MAIN_ACTIVITY_FRUIT_ADDED_ID)
+                if (newFruit != null) {
+                    listFruits.add(Fruit(newFruit.name, newFruit.benefits, null, (listNewPhotos.size - 1)))
+                    fruitAdapter.notifyItemInserted(listFruits.lastIndex)
+                }
             }
             if (MAIN_ACTIVITY_REMOVE_REQUEST_CODE == requestCode) {
                 val fruitIndex = data?.getIntExtra(MAIN_ACTIVITY_FRUIT_ID, -1)

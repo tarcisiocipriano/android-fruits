@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.TypedArray
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import cesar.school.android_fruits.databinding.ActivityFruitDetailsBinding
 import cesar.school.android_fruits.model.Fruit
 
@@ -17,17 +16,26 @@ class FruitDetailsActivity : AppCompatActivity() {
         resources.obtainTypedArray(R.array.fruitPhotos)
     }
 
+    private var listNewPhotos = MainActivity.listNewPhotos
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFruitDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val (name, benefits, photo) = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID) as Fruit
+        val fruit = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID)
         val index = intent.getIntExtra(MainActivity.MAIN_ACTIVITY_FRUIT_INDEX, -1)
 
-        binding.detailsFruitName.text = name
-        binding.detailsFruitBenefits.text = benefits
-        binding.detailsFruitPhoto.setImageDrawable(fruitPhotos.getDrawable(photo))
+
+        if (fruit != null) {
+            binding.detailsFruitName.text = fruit.name
+            binding.detailsFruitBenefits.text = fruit.benefits
+            if (fruit.photo != null) {
+                binding.detailsFruitPhoto.setImageDrawable(fruitPhotos.getDrawable(fruit.photo))
+            } else {
+                binding.detailsFruitPhoto.setImageBitmap(listNewPhotos[fruit.photoAdded!!])
+            }
+        }
 
         // remove fruit
         binding.buttonRemoveFruit.setOnClickListener {

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import cesar.school.android_fruits.MainActivity
 import cesar.school.android_fruits.R
 import cesar.school.android_fruits.databinding.ItemFruitBinding
 import cesar.school.android_fruits.model.Fruit
@@ -18,6 +19,8 @@ class FruitAdapter(private val context: Context,
     private val fruitPhotos: TypedArray by lazy {
         context.resources.obtainTypedArray(R.array.fruitPhotos)
     }
+
+    private var listNewPhotos = MainActivity.listNewPhotos
 
     class VH(itemView: ItemFruitBinding): RecyclerView.ViewHolder(itemView.root) {
         val fruitName: TextView = itemView.itemFruitName
@@ -36,10 +39,14 @@ class FruitAdapter(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val (name, benefits, photo) = fruits[position]
-        holder.fruitName.text = name
-        holder.fruitBenefits.text = benefits
-        holder.fruitPhoto.setImageDrawable(fruitPhotos.getDrawable(photo))
+        val fruit = fruits[position]
+        holder.fruitName.text = fruit.name
+        holder.fruitBenefits.text = fruit.benefits
+        if (fruit.photo != null) {
+            holder.fruitPhoto.setImageDrawable(fruitPhotos.getDrawable(fruit.photo))
+        } else {
+            holder.fruitPhoto.setImageBitmap(listNewPhotos[fruit.photoAdded!!])
+        }
     }
 
     override fun getItemCount(): Int = fruits.size
