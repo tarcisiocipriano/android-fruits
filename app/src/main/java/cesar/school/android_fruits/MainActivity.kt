@@ -22,16 +22,13 @@ class MainActivity : AppCompatActivity() {
         const val MAIN_ACTIVITY_FRUIT_INDEX = "fruitIndex"
 
         val listNewPhotos = mutableListOf<Bitmap>()
+
+        const val SAVED_FRUIT_LIST = "save_fruit_list"
     }
 
     private lateinit var binding : ActivityMainBinding
 
-    private val listFruits = mutableListOf(
-        Fruit("Apple", "Lorem ipsum", 0, null),
-        Fruit("Grape", "Lorem ipsum", 1, null),
-        Fruit("Orange", "Lorem ipsum", 2, null),
-        Fruit("Strawberry", "Lorem ipsum", 3, null)
-    )
+    private var listFruits = ArrayList<Fruit>()
 
     private val fruitAdapter = FruitAdapter(this, listFruits, this::onFruitClickListener)
 
@@ -39,6 +36,19 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // set the state restored in the view, or just initiate with 4 fruit samples
+        if (savedInstanceState != null) {
+            listFruits.addAll(savedInstanceState.getParcelableArrayList(SAVED_FRUIT_LIST) ?: ArrayList())
+            fruitAdapter.notifyDataSetChanged()
+        } else {
+            listFruits.addAll(arrayListOf(
+                Fruit("Apple", "Lorem ipsum", 0, null),
+                Fruit("Grape", "Lorem ipsum", 1, null),
+                Fruit("Orange", "Lorem ipsum", 2, null),
+                Fruit("Strawberry", "Lorem ipsum", 3, null)
+            ))
+        }
 
         binding.fruitList.adapter = fruitAdapter
         binding.fruitList.layoutManager = GridLayoutManager(this, 1)
@@ -77,5 +87,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(SAVED_FRUIT_LIST, listFruits)
     }
 }
