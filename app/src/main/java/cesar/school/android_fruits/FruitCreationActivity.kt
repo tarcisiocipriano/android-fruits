@@ -19,6 +19,7 @@ class FruitCreationActivity : AppCompatActivity() {
 
     companion object {
         const val GALLERY_PICTURE = 1
+        const val SAVED_FRUIT_PHOTO = "save_fruit_photo"
         var newFruitPhoto: Bitmap? = null
     }
 
@@ -31,12 +32,21 @@ class FruitCreationActivity : AppCompatActivity() {
         binding = ActivityFruitCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (savedInstanceState != null) {
+            val bitmap: Bitmap? = savedInstanceState.getParcelable<Bitmap>(SAVED_FRUIT_PHOTO)
+            bitmap?.let {
+                newFruitPhoto = it;
+                binding.imageFruitPreview.setImageBitmap(bitmap)
+            }
+        }
+
         binding.buttonAddFruitConfirm.setOnClickListener {
             val name = binding.inputFruitName.text.toString()
             val benefits = binding.textareaFruitBenefits.text.toString()
 
             if (name.isNotEmpty() && benefits.isNotEmpty() && newFruitPhoto != null) {
                 newFruitPhoto?.let { listNewPhotos.add(it) }
+                newFruitPhoto = null
                 val newFruit = Fruit(name, benefits)
                 val returnIntent = Intent()
                 returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ADDED_ID, newFruit)
@@ -71,5 +81,10 @@ class FruitCreationActivity : AppCompatActivity() {
             bitmap?.let { newFruitPhoto = it }
             binding.imageFruitPreview.setImageBitmap(bitmap)
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(SAVED_FRUIT_PHOTO, newFruitPhoto)
     }
 }
