@@ -2,8 +2,16 @@
 <resources>
     <array name="fruitPhotos">
         <item>@drawable/fruit_apple</item>
+        <item>@drawable/fruit_avocado</item>
+        <item>@drawable/fruit_banana</item>
+        <item>@drawable/fruit_blueberries</item>
+        <item>@drawable/fruit_cherries</item>
         <item>@drawable/fruit_grape</item>
+        <item>@drawable/fruit_guava</item>
+        <item>@drawable/fruit_mango</item>
         <item>@drawable/fruit_orange</item>
+        <item>@drawable/fruit_pineaple</item>
         <item>@drawable/fruit_strawberry</item>
+        <item>@drawable/fruit_watermelon</item>
     </array>
 </resources>

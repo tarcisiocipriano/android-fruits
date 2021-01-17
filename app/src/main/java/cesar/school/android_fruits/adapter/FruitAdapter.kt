@@ -45,7 +45,7 @@ class FruitAdapter(private val context: Context,
         if (fruit.photo != null) {
             holder.fruitPhoto.setImageDrawable(fruitPhotos.getDrawable(fruit.photo))
         } else {
-            holder.fruitPhoto.setImageBitmap(listNewPhotos[fruit.photoAdded!!])
+            fruit.photoAdded?.let { holder.fruitPhoto.setImageBitmap(listNewPhotos[it]) }
         }
     }
 

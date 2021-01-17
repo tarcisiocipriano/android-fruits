@@ -13,17 +13,16 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import cesar.school.android_fruits.databinding.ActivityFruitCreationBinding
 import cesar.school.android_fruits.model.Fruit
-import java.io.IOException
 
 
 class FruitCreationActivity : AppCompatActivity() {
 
     companion object {
         const val GALLERY_PICTURE = 1
+        var newFruitPhoto: Bitmap? = null
     }
 
     private lateinit var binding: ActivityFruitCreationBinding
-    private lateinit var newFruitPhoto: Bitmap
 
     private var listNewPhotos = MainActivity.listNewPhotos
 
@@ -31,19 +30,22 @@ class FruitCreationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFruitCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Toast.makeText(this, "works", Toast.LENGTH_SHORT)
 
         binding.buttonAddFruitConfirm.setOnClickListener {
             val name = binding.inputFruitName.text.toString()
             val benefits = binding.textareaFruitBenefits.text.toString()
 
-            if (!name.isNullOrEmpty() && !benefits.isNullOrEmpty()) {
-                listNewPhotos.add(newFruitPhoto)
-                val newFruit = Fruit(name, benefits, null, null)
+            if (name.isNotEmpty() && benefits.isNotEmpty() && newFruitPhoto != null) {
+                newFruitPhoto?.let { listNewPhotos.add(it) }
+                val newFruit = Fruit(name, benefits)
                 val returnIntent = Intent()
                 returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ADDED_ID, newFruit)
                 setResult(Activity.RESULT_OK, returnIntent)
                 finish()
+            } else if (newFruitPhoto == null) {
+                Toast.makeText(this, "Select an image", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Fill in the fields", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -64,17 +66,10 @@ class FruitCreationActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == GALLERY_PICTURE) {
-            try {
-//                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, data?.data!!)
-                val source = ImageDecoder.createSource(this.contentResolver, data?.data!!)
-                val bitmap = ImageDecoder.decodeBitmap(source)
-
-                newFruitPhoto = bitmap
-
-                binding.imageFruitPreview.setImageBitmap(bitmap)
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            val source = data?.data?.let { ImageDecoder.createSource(this.contentResolver, it) }
+            val bitmap = source?.let { ImageDecoder.decodeBitmap(it) }
+            bitmap?.let { newFruitPhoto = it }
+            binding.imageFruitPreview.setImageBitmap(bitmap)
         }
     }
 }
