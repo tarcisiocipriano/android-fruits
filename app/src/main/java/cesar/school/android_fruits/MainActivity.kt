@@ -43,10 +43,14 @@ class MainActivity : AppCompatActivity() {
             fruitAdapter.notifyDataSetChanged()
         } else {
             listFruits.addAll(arrayListOf(
-                Fruit("Apple", "Lorem ipsum", 0, null),
-                Fruit("Grape", "Lorem ipsum", 1, null),
-                Fruit("Orange", "Lorem ipsum", 2, null),
-                Fruit("Strawberry", "Lorem ipsum", 3, null)
+                Fruit("Apple", "Apples are among the most popular fruits, and also happen to be incredibly nutritious.\n" +
+                        "They contain a high amount of fiber, vitamin C, potassium and vitamin K. They also provide some B vitamins (19).", 0, null),
+                Fruit("Grape", "Grapes are very healthy. Their high antioxidant content is what makes them stand out.\n" +
+                        "The anthocyanins and resveratrol in grapes have both been shown to reduce inflammation (73Trusted Source, 74Trusted Source).", 1, null),
+                Fruit("Orange", "Oranges are one of the most popular and nutritious fruits in the world.\n" +
+                        "Eating one medium orange will provide a significant amount of vitamin C and potassium. They’re also a good source of B vitamins, such as thiamine and folate (62).", 2, null),
+                Fruit("Strawberry", "Strawberries are highly nutritious.\n" +
+                        "Their vitamin C, manganese, folate and potassium contents are where they really shine (34).", 3, null),
             ))
         }
 

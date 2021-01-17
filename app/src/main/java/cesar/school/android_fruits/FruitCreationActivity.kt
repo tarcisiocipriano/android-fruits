@@ -48,7 +48,7 @@ class FruitCreationActivity : AppCompatActivity() {
         }
 
         // upload image
-        binding.buttonUploadFruitPhoto.setOnClickListener {
+        binding.imageFruitPreview.setOnClickListener {
             try {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 intent.type = "image/*"
