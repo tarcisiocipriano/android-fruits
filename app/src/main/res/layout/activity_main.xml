@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFF3E0"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -31,10 +31,9 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="32dp"
         android:clickable="true"
+        android:focusable="true"
         android:foreground="@drawable/ic_baseline_add_24"
-        android:src="@android:drawable/ic_input_add"
-        android:tint="#FFFFFF"
-        app:backgroundTint="#D4E157"
+        app:backgroundTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

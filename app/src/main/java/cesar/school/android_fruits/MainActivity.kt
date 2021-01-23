@@ -5,11 +5,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import cesar.school.android_fruits.adapter.FruitAdapter
 import cesar.school.android_fruits.databinding.ActivityMainBinding
 import cesar.school.android_fruits.model.Fruit
-import cesar.school.android_fruits.mockData.initialFruits
+import cesar.school.android_fruits.MockData.initialFruits
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun recyclerviewSetup() {
         binding.fruitList.adapter = fruitAdapter
-        binding.fruitList.layoutManager = GridLayoutManager(this, 1)
+        binding.fruitList.layoutManager = LinearLayoutManager(this)
     }
 
     // fruitAdapter on click implementation
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addFruit(newFruit: Fruit) {
-        listFruits.add(newFruit.copy(photoAdded = listNewPhotos.size - 1))
+        listFruits.add(newFruit)
         fruitAdapter.notifyItemInserted(listFruits.lastIndex)
     }
 

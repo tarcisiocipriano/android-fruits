@@ -2,7 +2,7 @@ package cesar.school.android_fruits
 
 import cesar.school.android_fruits.model.Fruit
 
-object mockData {
+object MockData {
     val initialFruits = arrayListOf(
         Fruit(name = "Apple", photo = 0, benefits = "Apples are among the most popular fruits, and also happen to be incredibly nutritious.\n" +
                 "They contain a high amount of fiber, vitamin C, potassium and vitamin K. They also provide some B vitamins.\n" +
@@ -49,7 +49,7 @@ object mockData {
                 "The antioxidants in guava have been shown to protect cells from oxidative damage, indicating that they may help reduce the risk of chronic disease.\n" +
                 "Guava is another great source of pectin, which benefits digestion and may help prevent colon cancer.\n" +
                 "Guava is high in vitamins, minerals, fiber and antioxidants. It may reduce inflammation and help prevent certain cancers."),
-        Fruit(name = "mango", photo = 7, benefits = "Mangoes are an excellent source of vitamin C.\n" +
+        Fruit(name = "Mango", photo = 7, benefits = "Mangoes are an excellent source of vitamin C.\n" +
                 "They also contain soluble fiber, which can provide many health benefits.\n" +
                 "Additionally, mangoes have strong antioxidant and anti-inflammatory properties that may help reduce the risk of disease.\n" +
                 "In animal studies, the plant compounds in mangoes have been shown to protect against diabetes.\n" +

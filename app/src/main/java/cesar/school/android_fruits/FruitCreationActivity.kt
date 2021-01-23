@@ -47,7 +47,7 @@ class FruitCreationActivity : AppCompatActivity() {
             if (name.isNotEmpty() && benefits.isNotEmpty() && newFruitPhoto != null) {
                 newFruitPhoto?.let { listNewPhotos.add(it) }
                 newFruitPhoto = null
-                val newFruit = Fruit(name, benefits)
+                val newFruit = Fruit(name, benefits, photoAdded = listNewPhotos.lastIndex)
                 val returnIntent = Intent()
                 returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ADDED_ID, newFruit)
                 setResult(Activity.RESULT_OK, returnIntent)
