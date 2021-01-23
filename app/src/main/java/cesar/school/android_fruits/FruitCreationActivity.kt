@@ -32,6 +32,7 @@ class FruitCreationActivity : AppCompatActivity() {
         binding = ActivityFruitCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarCreation)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "Add fruit"
 

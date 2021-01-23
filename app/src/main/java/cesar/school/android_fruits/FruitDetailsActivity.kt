@@ -26,6 +26,7 @@ class FruitDetailsActivity : AppCompatActivity() {
         val fruit = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID)
         val index = intent.getIntExtra(MainActivity.MAIN_ACTIVITY_FRUIT_INDEX, -1)
 
+        setSupportActionBar(binding.toolbarDetails)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = fruit?.name
 
