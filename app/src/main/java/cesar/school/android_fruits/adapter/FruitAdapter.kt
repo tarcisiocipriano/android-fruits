@@ -29,7 +29,7 @@ class FruitAdapter(private val context: Context,
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val binding = ItemFruitBinding.inflate(LayoutInflater.from(parent.context))
+        val binding = ItemFruitBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         val vh = VH(binding)
         vh.itemView.setOnClickListener {
             val fruit = fruits[vh.adapterPosition]
