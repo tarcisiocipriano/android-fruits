@@ -32,6 +32,9 @@ class FruitCreationActivity : AppCompatActivity() {
         binding = ActivityFruitCreationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Add fruit"
+
         if (savedInstanceState != null) {
             val bitmap: Bitmap? = savedInstanceState.getParcelable<Bitmap>(SAVED_FRUIT_PHOTO)
             bitmap?.let {

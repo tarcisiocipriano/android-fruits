@@ -26,9 +26,10 @@ class FruitDetailsActivity : AppCompatActivity() {
         val fruit = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID)
         val index = intent.getIntExtra(MainActivity.MAIN_ACTIVITY_FRUIT_INDEX, -1)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = fruit?.name
 
         if (fruit != null) {
-            binding.detailsFruitName.text = fruit.name
             binding.detailsFruitBenefits.text = fruit.benefits
             if (fruit.photo != null) {
                 binding.detailsFruitPhoto.setImageDrawable(fruitPhotos.getDrawable(fruit.photo))
