@@ -38,6 +38,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarMain)
+        supportActionBar?.title = "Fruit list"
+
         listFruitsInit(savedInstanceState)
         recyclerviewSetup()
 
