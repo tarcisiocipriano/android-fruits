@@ -32,18 +32,6 @@
             android:paddingRight="16dp"
             tools:context=".FruitDetailsActivity">
 
-            <Button
-                android:id="@+id/buttonRemoveFruit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:text="Remove fruit"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/detailsFruitBenefits" />
-
             <ImageView
                 android:id="@+id/detailsFruitPhoto"
                 android:layout_width="0dp"
@@ -59,8 +47,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:text="TextView"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailsFruitPhoto" />
