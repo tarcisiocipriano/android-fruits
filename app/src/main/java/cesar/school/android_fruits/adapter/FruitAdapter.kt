@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +15,16 @@ import cesar.school.android_fruits.databinding.ItemFruitBinding
 import cesar.school.android_fruits.model.Fruit
 
 class FruitAdapter(private val context: Context,
-                   private val fruits: List<Fruit>,
-                   private val callback: (Fruit, Int) -> Unit): RecyclerView.Adapter<FruitAdapter.VH>() {
+                   private val originalFruitsList: ArrayList<Fruit>,
+                   private val callback: (Fruit, Int) -> Unit): RecyclerView.Adapter<FruitAdapter.VH>(), Filterable {
+
+    companion object {
+        var fruits = arrayListOf<Fruit>()
+    }
+
+    init {
+        fruits.addAll(originalFruitsList)
+    }
 
     private val fruitPhotos: TypedArray by lazy {
         context.resources.obtainTypedArray(R.array.fruitPhotos)
@@ -50,4 +60,49 @@ class FruitAdapter(private val context: Context,
     }
 
     override fun getItemCount(): Int = fruits.size
+
+    fun isFiltered(): Boolean {
+        return originalFruitsList.size != fruits.size
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun publishResults(constraint: CharSequence, results: FilterResults) {
+                fruits.clear()
+                fruits.addAll(results.values as List<Fruit>)
+                notifyDataSetChanged()
+            }
+
+            override fun performFiltering(constraint: CharSequence): FilterResults {
+                val filteredResults: List<Fruit> = if (constraint.isEmpty()) {
+                    originalFruitsList
+                } else {
+                    getFilteredResults(constraint.toString())
+                }
+                val results = FilterResults()
+                results.values = filteredResults
+                return results
+            }
+
+            private fun getFilteredResults(constraint: String): List<Fruit> {
+                val results = ArrayList<Fruit>()
+                when (constraint) {
+                    MainActivity.REMOVE_DUPLICATED_ORDERED_ALPHABETICALLY -> {
+                        val temp = ArrayList<Fruit>(originalFruitsList.distinctBy { fruit -> fruit.name })
+                        results.addAll(temp.sortedBy { fruit -> fruit.name.toLowerCase() })
+                    }
+                    MainActivity.REMOVE_DUPLICATED -> {
+                        results.addAll(originalFruitsList.distinctBy { fruit -> fruit.name })
+                    }
+                    MainActivity.ORDERED_ALPHABETICALLY_STATE -> {
+                        results.addAll(originalFruitsList.sortedBy { fruit -> fruit.name.toLowerCase() })
+                    }
+                    else -> {
+                        results.addAll(originalFruitsList)
+                    }
+                }
+                return results
+            }
+        }
+    }
 }

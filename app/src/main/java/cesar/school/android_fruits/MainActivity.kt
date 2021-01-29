@@ -4,7 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import cesar.school.android_fruits.adapter.FruitAdapter
 import cesar.school.android_fruits.databinding.ActivityMainBinding
@@ -24,12 +28,23 @@ class MainActivity : AppCompatActivity() {
 
         val listNewPhotos = mutableListOf<Bitmap>()
 
-        const val SAVED_FRUIT_LIST = "save_fruit_list"
+        const val REMOVE_DUPLICATED = "REMOVE_DUPLICATED"
+        const val REMOVE_DUPLICATED_ORDERED_ALPHABETICALLY = "REMOVE_DUPLICATED_ORDERED_ALPHABETICALLY"
+
+        const val DUPLICATED_STATE = "DUPLICATED_STATE"
+        const val ORDERED_ALPHABETICALLY_STATE = "ORDERED_ALPHABETICALLY_STATE"
     }
 
     private lateinit var binding : ActivityMainBinding
 
     private var listFruits = ArrayList<Fruit>()
+
+    private var listNotDuplicated = false;
+    private var listOrderedAlphabetically = false;
+
+    init {
+        listFruits = arrayListOf<Fruit>().apply { addAll(initialFruits) }
+    }
 
     private val fruitAdapter = FruitAdapter(this, listFruits, this::onFruitClickListener)
 
@@ -51,12 +66,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun listFruitsInit(savedInstanceState: Bundle?) {
-        if (savedInstanceState == null) {
-            listFruits.addAll(initialFruits)
-        } else {
-            listFruits.addAll(savedInstanceState.getParcelableArrayList(SAVED_FRUIT_LIST) ?: ArrayList())
-            fruitAdapter.notifyDataSetChanged()
-        }
+        savedInstanceState?.getBoolean(DUPLICATED_STATE)?.let { listNotDuplicated = it }
+        savedInstanceState?.getBoolean(ORDERED_ALPHABETICALLY_STATE)?.let { listOrderedAlphabetically = it }
+        fruitListFilter(listNotDuplicated, listOrderedAlphabetically)
+        fruitAdapter.notifyDataSetChanged()
     }
 
     private fun recyclerviewSetup() {
@@ -73,13 +86,40 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addFruit(newFruit: Fruit) {
-        listFruits.add(newFruit)
+        newFruit.let { initialFruits.add(it); listFruits.add(it); FruitAdapter.fruits.add(it) }
+        fruitListFilter(listNotDuplicated, listOrderedAlphabetically)
         fruitAdapter.notifyItemInserted(listFruits.lastIndex)
     }
 
     private fun removeFruit(fruitIndex: Int) {
-        listFruits.removeAt(fruitIndex)
+        fruitIndex.let { listFruits.removeAt(it); FruitAdapter.fruits.removeAt(it); initialFruits.removeAt(it) }
+        fruitListFilter(listNotDuplicated, listOrderedAlphabetically)
         fruitAdapter.notifyDataSetChanged()
+    }
+
+    private fun fruitListFilter(duplicated: Boolean, alphabeticallyOrdered: Boolean) {
+        when {
+            duplicated && alphabeticallyOrdered -> {
+                fruitAdapter.filter.filter(REMOVE_DUPLICATED_ORDERED_ALPHABETICALLY)
+                listNotDuplicated = true
+                listOrderedAlphabetically = true
+            }
+            duplicated -> {
+                fruitAdapter.filter.filter(REMOVE_DUPLICATED)
+                listNotDuplicated = true
+                listOrderedAlphabetically = false
+            }
+            alphabeticallyOrdered -> {
+                fruitAdapter.filter.filter(ORDERED_ALPHABETICALLY_STATE)
+                listNotDuplicated = false
+                listOrderedAlphabetically = true
+            }
+            else -> {
+                fruitAdapter.filter.filter("")
+                listNotDuplicated = false
+                listOrderedAlphabetically = false
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -94,8 +134,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_filter -> {
+            val builder = AlertDialog.Builder(this)
+            val view = layoutInflater.inflate(R.layout.dialog_filter, null)
+            val switchDuplicated = view.findViewById<SwitchCompat>(R.id.switchDuplicated)
+            val switchOrderAlphabetically = view.findViewById<SwitchCompat>(R.id.switchOrderAlphabetically)
+
+            if (fruitAdapter.isFiltered()) switchDuplicated.isChecked = true
+            if (listOrderedAlphabetically) switchOrderAlphabetically.isChecked = true
+
+            builder.apply {
+                setView(view)
+                setPositiveButton("Filter") { dialog, _ ->
+                    fruitListFilter(switchDuplicated.isChecked, switchOrderAlphabetically.isChecked)
+                    dialog.dismiss()
+                }
+            }
+            builder.create().show()
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelableArrayList(SAVED_FRUIT_LIST, listFruits)
+        outState.putBoolean(DUPLICATED_STATE, listNotDuplicated)
+        outState.putBoolean(ORDERED_ALPHABETICALLY_STATE, listOrderedAlphabetically)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }
