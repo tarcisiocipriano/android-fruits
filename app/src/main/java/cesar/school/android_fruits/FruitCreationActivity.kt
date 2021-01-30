@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import cesar.school.android_fruits.databinding.ActivityFruitCreationBinding
 import cesar.school.android_fruits.model.Fruit
+import cesar.school.android_fruits.MockData.initialFruits
 
 
 class FruitCreationActivity : AppCompatActivity() {
@@ -47,11 +48,13 @@ class FruitCreationActivity : AppCompatActivity() {
         binding.buttonAddFruitConfirm.setOnClickListener {
             val name = binding.inputFruitName.text.toString()
             val benefits = binding.textareaFruitBenefits.text.toString()
+            val lastFruitId = initialFruits.last().id
 
             if (name.isNotEmpty() && benefits.isNotEmpty() && newFruitPhoto != null) {
                 newFruitPhoto?.let { listNewPhotos.add(it) }
                 newFruitPhoto = null
-                val newFruit = Fruit(name, benefits, photoAdded = listNewPhotos.lastIndex)
+
+                val newFruit = Fruit(lastFruitId + 1, name, benefits, photoAdded = listNewPhotos.lastIndex)
                 val returnIntent = Intent()
                 returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ADDED_ID, newFruit)
                 setResult(Activity.RESULT_OK, returnIntent)

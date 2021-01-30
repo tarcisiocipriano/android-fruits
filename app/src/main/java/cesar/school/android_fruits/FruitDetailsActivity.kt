@@ -16,7 +16,7 @@ class FruitDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFruitDetailsBinding
 
-    private var index: Int? = null
+    private var fruit: Fruit? = null
 
     private val fruitPhotos: TypedArray by lazy {
         resources.obtainTypedArray(R.array.fruitPhotos)
@@ -30,14 +30,13 @@ class FruitDetailsActivity : AppCompatActivity() {
         binding = ActivityFruitDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val fruit = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID)
-        index = intent.getIntExtra(MainActivity.MAIN_ACTIVITY_FRUIT_INDEX, -1)
+        fruit = intent.getParcelableExtra<Fruit>(MainActivity.MAIN_ACTIVITY_FRUIT_ID) as Fruit
 
         setSupportActionBar(binding.toolbarDetails)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = fruit?.name
 
-        if (fruit != null) {
+        fruit?.let {fruit ->
             binding.detailsFruitBenefits.text = fruit.benefits
             if (fruit.photo != null) {
                 binding.detailsFruitPhoto.setImageDrawable(fruitPhotos.getDrawable(fruit.photo))
@@ -47,9 +46,9 @@ class FruitDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun removeFruit(index: Int) {
+    private fun fruitToRemove(fruit: Fruit) {
         val returnIntent = Intent()
-        returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ID, index)
+        returnIntent.putExtra(MainActivity.MAIN_ACTIVITY_FRUIT_ID, fruit)
         setResult(Activity.RESULT_OK, returnIntent)
         finish()
     }
@@ -62,7 +61,7 @@ class FruitDetailsActivity : AppCompatActivity() {
                 setMessage("You're about to remove the fruit, are you sure?")
                 setCancelable(false)
                 setPositiveButton("Yes") { _, _ ->
-                    index?.let { removeFruit(it) }
+                    fruit?.let { fruitToRemove(it) }
                     Toast.makeText(this@FruitDetailsActivity, "Fruit removed", Toast.LENGTH_SHORT).show()
                 }
                 setNegativeButton("No") { dialog, _ ->

@@ -91,8 +91,8 @@ class MainActivity : AppCompatActivity() {
         fruitAdapter.notifyItemInserted(listFruits.lastIndex)
     }
 
-    private fun removeFruit(fruitIndex: Int) {
-        fruitIndex.let { listFruits.removeAt(it); FruitAdapter.fruits.removeAt(it); initialFruits.removeAt(it) }
+    private fun removeFruit(fruit: Fruit) {
+        fruit.let { listFruits.remove(fruit); FruitAdapter.fruits.remove(fruit); initialFruits.remove(fruit) }
         fruitListFilter(listNotDuplicated, listOrderedAlphabetically)
         fruitAdapter.notifyDataSetChanged()
     }
@@ -129,8 +129,8 @@ class MainActivity : AppCompatActivity() {
             newFruit?.let { addFruit(it) }
         }
         if (resultCode == Activity.RESULT_OK && MAIN_ACTIVITY_REMOVE_REQUEST_CODE == requestCode) {
-            val fruitIndex = data?.getIntExtra(MAIN_ACTIVITY_FRUIT_ID, -1)
-            fruitIndex?.let { removeFruit(it) }
+            val fruitToRemove = data?.getParcelableExtra<Fruit>(MAIN_ACTIVITY_FRUIT_ID)
+            fruitToRemove?.let { removeFruit(it) }
         }
     }
 

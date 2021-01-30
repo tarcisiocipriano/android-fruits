@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Fruit (
+        val id: Int,
         val name: String,
         val benefits: String,
         val photo: Int? = null,
