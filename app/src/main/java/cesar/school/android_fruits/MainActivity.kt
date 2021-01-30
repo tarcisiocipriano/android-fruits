@@ -6,14 +6,15 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import cesar.school.android_fruits.MockData.initialFruits
 import cesar.school.android_fruits.adapter.FruitAdapter
 import cesar.school.android_fruits.databinding.ActivityMainBinding
 import cesar.school.android_fruits.model.Fruit
-import cesar.school.android_fruits.MockData.initialFruits
 
 
 class MainActivity : AppCompatActivity() {
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         fruitAdapter.notifyDataSetChanged()
     }
 
-    private fun fruitListFilter(duplicated: Boolean, alphabeticallyOrdered: Boolean) {
+    private fun fruitListFilter(duplicated: Boolean, alphabeticallyOrdered: Boolean, constraint: String = "") {
         when {
             duplicated && alphabeticallyOrdered -> {
                 fruitAdapter.filter.filter(REMOVE_DUPLICATED_ORDERED_ALPHABETICALLY)
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 listOrderedAlphabetically = true
             }
             else -> {
-                fruitAdapter.filter.filter("")
+                fruitAdapter.filter.filter(constraint)
                 listNotDuplicated = false
                 listOrderedAlphabetically = false
             }
@@ -167,6 +168,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        val search = menu?.findItem(R.id.app_bar_search)
+        val searchView = search?.actionView as SearchView
+
+        searchView.isFocusable = true
+        searchView.isIconified = false
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let { fruitListFilter(
+                    duplicated = false,
+                    alphabeticallyOrdered = false,
+                    constraint = it
+                ) }
+                return true
+            }
+        })
         return super.onCreateOptionsMenu(menu)
     }
 }

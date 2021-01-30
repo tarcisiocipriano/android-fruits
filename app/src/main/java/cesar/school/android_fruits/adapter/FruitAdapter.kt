@@ -98,7 +98,7 @@ class FruitAdapter(private val context: Context,
                         results.addAll(originalFruitsList.sortedBy { fruit -> fruit.name.toLowerCase() })
                     }
                     else -> {
-                        results.addAll(originalFruitsList)
+                        results.addAll(originalFruitsList.filter { fruit -> fruit.name.toLowerCase().trim().contains(constraint.toLowerCase().trim()) })
                     }
                 }
                 return results
